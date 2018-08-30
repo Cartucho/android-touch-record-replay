@@ -74,7 +74,7 @@ In my case, my touchscreen's name is `/dev/input/event7` which I will be using f
 
 5. In order to replay those events we will use the `mysendevent` executable, which will read the `recorded_touch_events.txt` file line by line and inject those events in the kernel input. To do this we need to push this executable to the phone by using the following command `adb push mysendevent /data/local/tmp/`
 
-    In case you want to modify the file `mysendevent.c` you have to recompile it (for android, e.g., use `arm-linux-gnueabi-gcc -static -march=armv7-a mysendevent.c -o mysendevent`) and re-push `mysendevent` to the phone.
+    Note: In case you want to modify the file `mysendevent.c` you have to recompile it (for android, e.g., use `arm-linux-gnueabi-gcc -static -march=armv7-a mysendevent.c -o mysendevent`) and re-push `mysendevent` to the phone.
 
 6. Finally, we can replay the previous recording by running the command `adb shell /data/local/tmp/mysendevent /dev/input/event7 /sdcard/recorded_touch_events.txt`
 
