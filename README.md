@@ -1,6 +1,14 @@
-# android-touch-record-replay
+# Record and Replay Touchscreen Events on Android
 
 How to record and replay touchscreen events on an Android device.
+
+## Table of contents
+
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Easy method](#easy-method)
+- [Step-by-step method and Explanation](#step-by-step-method-and-explanation)
+- [Authors](#authors)
 
 ## Prerequisites
 
@@ -8,18 +16,24 @@ You need to:
 
 - Install ADB in your computer (check if it is already installed by running in a terminal the following command: `adb devices`)
 - Enable `USB Debugging` in your Android device (`Settings > Developer Options > USB Debugging`)
-- Clone this repo: `git clone https://github.com/Cartucho/android-touch-events-record-replay`
 
 Now, connect your device to your computer, via a USB cable, and run the following bash script in a terminal:
 
-    `./find_touchscreen_name.sh`
+    ./find_touchscreen_name.sh
 
-, if this works, aka you get the output message `"Touchscreen device found!"`, you can use the [Easy method](https://github.com/Cartucho/android-touch-record-replay#easy-method) otherwise you need to use the [Step-by-step method](https://github.com/Cartucho/android-touch-record-replay#step-by-step-method-and-explanation).
+, if this works, aka you get the output message `"Touchscreen device found!"`, you can use the [Easy method](#easy-method) otherwise you need to use the [Step-by-step method](#step-by-step-method-and-explanation).
 
 Optional:
 
 - It is easier for you to visualize things by enabling `Show touches` or `Pointer location` (`Settings > Developer Options > Input > Show touches`)
 
+
+## Quick start
+To start using the mAP you need to clone the repo:
+
+```
+git clone https://github.com/Cartucho/android-touch-record-replay
+```
 
 ## Easy method
 
@@ -63,3 +77,10 @@ In my case, my touchscreen's name is `/dev/input/event7` which I will be using f
     In case you want to modify the file `mysendevent.c` you have to recompile it (for android, e.g., use `arm-linux-gnueabi-gcc -static -march=armv7-a mysendevent.c -o mysendevent`) and re-push `mysendevent` to the phone.
 
 6. Finally, we can replay the previous recording by running the command `adb shell /data/local/tmp/mysendevent /dev/input/event7 /sdcard/recorded_touch_events.txt`
+
+## Authors:
+* **João Cartucho**
+
+    Feel free to contribute
+
+    [![GitHub contributors](https://img.shields.io/github/contributors/Cartucho/android-touch-record-replay.svg)](https://github.com/Cartucho/android-touch-record-replay/graphs/contributors)
