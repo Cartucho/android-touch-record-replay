@@ -14,7 +14,7 @@ Now, connect your device to your computer, via a USB cable, and run the followin
 
     `./find_touchscreen_name.sh`
 
-    if this works, aka you get the output message `"Touchscreen device found!"`, you can use the (Easy method)[https://github.com/Cartucho/android-touch-record-replay#easy-method] otherwise you need to use the (Step-by-step method)[https://github.com/Cartucho/android-touch-record-replay#step-by-step-method-and-explanation].
+, if this works, aka you get the output message `"Touchscreen device found!"`, you can use the (Easy method)[https://github.com/Cartucho/android-touch-record-replay#easy-method] otherwise you need to use the (Step-by-step method)[https://github.com/Cartucho/android-touch-record-replay#step-by-step-method-and-explanation].
 
 Optional:
 
