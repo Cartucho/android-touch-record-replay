@@ -1,6 +1,13 @@
 # Record and Replay Touchscreen Events on Android
 
+[![GitHub stars](https://img.shields.io/github/stars/Cartucho/android-touch-record-replay.svg?style=social&label=Stars)](https://github.com/Cartucho/android-touch-record-replay)
+
 How to record and replay touchscreen events on an Android device.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/15831541/44855448-f4e1a080-ac62-11e8-8b7d-4e48cc80a269.gif"/>
+</p>
+
 
 ## Table of contents
 
