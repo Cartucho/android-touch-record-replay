@@ -2,7 +2,7 @@
 
 How to record and replay touchscreen events on an Android device.
 
-#### Prerequisites
+## Prerequisites
 
 You need to:
 
@@ -21,7 +21,7 @@ Optional:
 - It is easier for you to visualize things by enabling `Show touches` or `Pointer location` (`Settings > Developer Options > Input > Show touches`)
 
 
-#### Easy method
+## Easy method
 
 1. Record touch events with timestamps:
 
@@ -31,7 +31,7 @@ Optional:
 
     `./replay_touch_events.sh`
 
-#### Step-by-step method and Explanation
+## Step-by-step method and Explanation
 
 Android uses the Linux kernel so it processes input events the same way as any other Linux system.
 With the android's [getevent](https://source.android.com/devices/input/getevent) tool we can record the live dump of kernel input events and use that recording to replay the same touch events.
@@ -45,16 +45,14 @@ In my case, my touchscreen's name is `/dev/input/event7` which I will be using f
 
 3. Using the touchscreen's device name we can now record events using the command `adb shell getevent -t /dev/input/event7 > recorded_touch_events.txt`. Using the `-t` option we also record the timestamps (so that later we can replay the recorded input with the proper delay between events). The content on this file should look something like:
 
-    '''
-    ...
-    [   53890.813990] 0000 0000 00000000
-    [   53890.828065] 0003 0035 000001be
-    [   53890.828065] 0003 0036 00000258
-    [   53890.828065] 0003 0030 0000001f
-    [   53890.828065] 0003 0032 0000001f
-    [   53890.828065] 0003 0039 00000000
-    ...
-    '''
+        ...
+        [   53890.813990] 0000 0000 00000000
+        [   53890.828065] 0003 0035 000001be
+        [   53890.828065] 0003 0036 00000258
+        [   53890.828065] 0003 0030 0000001f
+        [   53890.828065] 0003 0032 0000001f
+        [   53890.828065] 0003 0039 00000000
+        ...
 
     , where each line represents an event's `[   timestamp] type code value`.
 
