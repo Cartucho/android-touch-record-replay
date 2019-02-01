@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     FILE * fd_in = fopen(argv[2], "r");
     if (fd_in == NULL) {
-        fprintf(stderr, "could not open input file: %s\n", argv[1]);
+        fprintf(stderr, "could not open input file: %s\n", argv[2]);
         return 1;
     }
 
