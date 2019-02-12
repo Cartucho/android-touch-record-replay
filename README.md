@@ -36,7 +36,7 @@ Optional:
 
 
 ## Quick start
-To start using the mAP you need to clone the repo:
+To start you need to clone the repo:
 
 ```
 git clone https://github.com/Cartucho/android-touch-record-replay
