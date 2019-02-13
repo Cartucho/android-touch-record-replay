@@ -105,7 +105,7 @@ As mentioned in the previous section the touch data is in the following format
 
 According to the [android documentation](https://source.android.com/devices/input/getevent) the timestamp data is in the following format:
 
-getevent timestamps use the format $SECONDS.$MICROSECONDS in the CLOCK_MONOTONIC timebase.
+> getevent timestamps use the format $SECONDS.$MICROSECONDS in the CLOCK_MONOTONIC timebase.
 
 [CLOCK_REALTIME vs. CLOCK_MONOTONIC](https://stackoverflow.com/questions/3523442/difference-between-clock-realtime-and-clock-monotonic)
 
