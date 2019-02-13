@@ -15,6 +15,7 @@ How to record and replay touchscreen events on an Android device.
 - [Quick start](#quick-start)
 - [Easy method](#easy-method)
 - [Step-by-step method and Explanation](#step-by-step-method-and-explanation)
+- [Outputting Data](Outputting Touch Data)
 - [Authors](#authors)
 
 ## Prerequisites
@@ -36,7 +37,7 @@ Optional:
 
 
 ## Quick start
-To start you need to clone the repo:
+To start using the mAP you need to clone the repo:
 
 ```
 git clone https://github.com/Cartucho/android-touch-record-replay
@@ -85,7 +86,101 @@ In my case, my touchscreen's name is `/dev/input/event7` which I will be using f
 
 6. Finally, we can replay the previous recording by running the command `adb shell /data/local/tmp/mysendevent /dev/input/event7 /sdcard/recorded_touch_events.txt`
 
+## Outputting Touch Data
+
+You may want to export and anyalse the touch screen data.
+
+As mentioned in the previous section the touch data is in the following format
+
+| Timestamp         | Type | Code | Value    |
+| ----------------- | ---- | ---- | -------- |
+| [   53890.813990] | 0000 | 0000 | 000005b0 |
+| [   53890.828065] | 0003 | 0035 | 000001be |
+| [   53890.828065] | 0003 | 0036 | 00000258 |
+| [   53890.828065] | 0003 | 0030 | 0000001f |
+| [   53890.828065] | 0003 | 0032 | 0000001f |
+| [   53890.828065] | 0003 | 0039 | 00000000 |
+
+### Timestamp
+
+According to the [android documentation](https://source.android.com/devices/input/getevent) the timestamp data is in the following format:
+
+getevent timestamps use the format $SECONDS.$MICROSECONDS in the CLOCK_MONOTONIC timebase.
+
+[CLOCK_REALTIME vs. CLOCK_MONOTONIC](https://stackoverflow.com/questions/3523442/difference-between-clock-realtime-and-clock-monotonic)
+
+This dataformat is not ideal as it is relative to an arbitrary time in the system.
+
+We will not use this data in our data collection script.
+
+### Type & Code
+
+Currently we have output these as their codes, we can use the `-l` argument to output these codes as descriptive labels.
+
+For example:
+
+`adb shell getevent -lt /dev/input/event7 > recorded_touch_events.txt`
+
+would now output:
+
+| Timestamp         | Type   | Code               | Value    |
+| ----------------- | ------ | ------------------ | -------- |
+| [   46112.124651] | EV_ABS | ABS_MT_TRACKING_ID | 000005b0 |
+| [   46112.124651] | EV_ABS | ABS_MT_POSITION_X  | 0000010f |
+| [   46112.124651] | EV_ABS | ABS_MT_POSITION_Y  | 00000479 |
+| [   46112.124651] | EV_ABS | ABS_MT_PRESSURE    | 0000005f |
+| [   46112.124651] | EV_ABS | ABS_MT_TOUCH_MAJOR | 0000005f |
+| [   46112.124651] | EV_SYN | SYN_REPORT         | 00000000 |
+| [   46112.173948] | EV_SYN | 0004               | 0000b420 |
+| [   46112.173948] | EV_SYN | 0005               | 0a5db877 |
+
+### Value
+
+The value is currently being output as hexadecimal. We will convert the value into an integer when we collect the data in our script later.
+
+The following command will display the `min` and `max` values for each input:
+
+`adb shell getevent -lp /dev/input/event7`
+
+```
+  name:     "Melfas MMSxxx Touchscreen"
+  events:
+    ABS (0003): ABS_MT_SLOT           : value 0, min 0, max 9, fuzz 0, flat 0, resolution 0
+                ABS_MT_TOUCH_MAJOR    : value 0, min 0, max 30, fuzz 0, flat 0, resolution 0
+                ABS_MT_POSITION_X     : value 0, min 0, max 720, fuzz 0, flat 0, resolution 0
+                ABS_MT_POSITION_Y     : value 0, min 0, max 1280, fuzz 0, flat 0, resolution 0
+                ABS_MT_TRACKING_ID    : value 0, min 0, max 65535, fuzz 0, flat 0, resolution 0
+                ABS_MT_PRESSURE       : value 0, min 0, max 255, fuzz 0, flat 0, resolution 0
+  input props:
+    INPUT_PROP_DIRECT
+```
+
+### Output data to CSV
+
+The `human_readable_data.py` script will convert all of the touch data into a more readable format and output it to a csv file.
+
+**Usage:** `python human_readable_data.py arg1 arg2`
+
+| Argument | Value               | Example                             |
+| -------- | ------------------- | ----------------------------------- |
+| arg1     | touchscreen device  | /dev/input/event7                   |
+| arg2     | csv output location | /Users/$user/Desktop/touch_info.csv |
+
+This will create a csv file containing the following information:
+
+| **Timestamp**                  | **Type** | **Code**           | **Value** |
+| ------------------------------ | -------- | ------------------ | --------- |
+| **2019-02-13 10:30:41.558271** | EV_ABS   | ABS_MT_TRACKING_ID | 1804      |
+| **2019-02-13 10:30:41.558557** | EV_ABS   | ABS_MT_POSITION_X  | 805       |
+| **2019-02-13 10:30:41.558797** | EV_ABS   | ABS_MT_POSITION_Y  | 848       |
+| **2019-02-13 10:30:41.559035** | EV_ABS   | ABS_MT_PRESSURE    | 51        |
+| **2019-02-13 10:30:41.559245** | EV_ABS   | ABS_MT_TOUCH_MAJOR | 51        |
+| **2019-02-13 10:30:41.559453** | EV_SYN   | SYN_REPORT         | 0         |
+| **2019-02-13 10:30:41.697711** | EV_SYN   | 4                  | 66179     |
+| **2019-02-13 10:30:41.701748** | EV_SYN   | 5                  | 233329954 |
+
 ## Authors:
+
 * **João Cartucho**
 
     Feel free to contribute
