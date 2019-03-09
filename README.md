@@ -15,7 +15,7 @@ How to record and replay touchscreen events on an Android device.
 - [Quick start](#quick-start)
 - [Easy method](#easy-method)
 - [Step-by-step method and Explanation](#step-by-step-method-and-explanation)
-- [Outputting Data](Outputting Touch Data)
+- [Outputting Data](#output-data-to-csv)
 - [Authors](#authors)
 
 ## Prerequisites
