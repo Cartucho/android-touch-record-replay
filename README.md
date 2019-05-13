@@ -22,18 +22,18 @@ How to record and replay touchscreen events on an Android device.
 
 You need to:
 
-- Install ADB in your computer (check if it is already installed by running in a terminal the following command: `adb devices`)
+- Install ADB in your computer (`sudo apt install adb`)
 - Enable `USB Debugging` in your Android device (`Settings > Developer Options > USB Debugging`)
 
 Now, connect your device to your computer, via a USB cable, and run the following bash script in a terminal:
 
     ./find_touchscreen_name.sh
 
-, if this works, aka you get the output message `"Touchscreen device found!"`, you can use the [Easy method](#easy-method) otherwise you need to use the [Step-by-step method](#step-by-step-method-and-explanation).
+if you get the output message `"Touchscreen device found!"`, then you can use the [Easy method](#easy-method). Otherwise, you need to use the [Step-by-step method](#step-by-step-method-and-explanation).
 
 Optional:
 
-- It is easier for you to visualize things by enabling `Show touches` or `Pointer location` (`Settings > Developer Options > Input > Show touches`)
+- It is easier for you to visualize where you touched the screen by turning one of the following (1) `Show touches` or (2) `Pointer location` (In your phone go to `Settings > Developer Options > Input > Show touches`)
 
 
 ## Quick start
