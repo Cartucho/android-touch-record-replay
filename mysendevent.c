@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
         memset(&event, 0, sizeof(event));
         event.type = (int) strtol(type, NULL, 16);
         event.code = (int) strtol(code, NULL, 16);
-        event.value = (int) strtol(value, NULL, 16);
+        event.value = (uint32) stroll(value, NULL, 16);
         ret = write(fd, &event, sizeof(event));
         if(ret < sizeof(event)) {
             fprintf(stderr, "write event failed, %s\n", strerror(errno));
