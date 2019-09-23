@@ -18,7 +18,7 @@ struct input_event {
     struct timeval time;
     __u16 type;
     __u16 code;
-    __s32 value;
+    __u32 value;
 };
 
 #define MICROSEC 1000000
@@ -115,11 +115,10 @@ int main(int argc, char *argv[])
         sleep_time = (unsigned int) ((timestamp_now - timestamp_previous) * MICROSEC);
         
         if(timestamp_previous != 0.0){
-            usleep(sleep_time);        
+            // we don't care about the value of a single event's timestamp but the difference between two sequential events
+            usleep(sleep_time); // sleep_time is in MICROSECONDS
         }
-        
-        // we don't care about the value of a single event's timestamp but the difference between two sequential events
-        usleep(sleep_time); // sleep_time is in MICROSECONDS
+
         timestamp_previous = timestamp_now;
 
         // Clear temporary buffers
