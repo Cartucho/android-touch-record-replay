@@ -89,8 +89,8 @@ int main(int argc, char *argv[])
 
     char line[128];
     unsigned int sleep_time;
-    double timestamp_previous = 0.0;
-    double timestamp_now = 0.0;
+    double timestamp_previous = -1.0;
+    double timestamp_now;
     char type[32];
     char code[32];
     char value[32];
@@ -104,19 +104,20 @@ int main(int argc, char *argv[])
         memset(&event, 0, sizeof(event));
         event.type = (int) strtol(type, NULL, 16);
         event.code = (int) strtol(code, NULL, 16);
-        event.value = (uint32) stroll(value, NULL, 16);
+        event.value = (uint32_t) strtoll(value, NULL, 16);
         ret = write(fd, &event, sizeof(event));
         if(ret < sizeof(event)) {
             fprintf(stderr, "write event failed, %s\n", strerror(errno));
             return -1;
         }
 
-        // In order to playback the same gestures the code sleeps accordingly to the timestamps from the inputed recording
-        sleep_time = (unsigned int) ((timestamp_now - timestamp_previous) * MICROSEC);
-        
-        if(timestamp_previous != 0.0){
-            // we don't care about the value of a single event's timestamp but the difference between two sequential events
-            usleep(sleep_time); // sleep_time is in MICROSECONDS
+        if(timestamp_previous != -1.0)
+        {
+          // In order to playback the same gestures the code sleeps accordingly to the timestamps from the inputed recording
+          sleep_time = (unsigned int) ((timestamp_now - timestamp_previous) * MICROSEC);
+
+          // we don't care about the value of a single event's timestamp but the difference between two sequential events
+          usleep(sleep_time); // sleep_time is in MICROSECONDS
         }
 
         timestamp_previous = timestamp_now;
