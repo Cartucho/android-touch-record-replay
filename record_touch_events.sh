@@ -11,5 +11,7 @@ then
     # Device found! Start recording
     echo "Recording will start as soon as you put your finger in the touchscreen."
     echo "Press ctrl+c to stop recording..."
-    `adb shell getevent -t "${TOUCH_DEVICE#*-> }" > recorded_touch_events.txt`
+    
+    #exec-out is shell without buffering, fixing missing last touch data event
+    `adb exec-out getevent -t "${TOUCH_DEVICE#*-> }" > recorded_touch_events.txt` 
 fi
