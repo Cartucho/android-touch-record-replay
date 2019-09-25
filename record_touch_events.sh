@@ -2,10 +2,11 @@
 
 echo "Looking for touchscreen device..."
 TOUCH_DEVICE=`./find_touchscreen_name.sh`
-ANDROID_VERSION=`adb shell getprop ro.build.version.release`
-MIN_VERSION=6.0
+ANDROID_VERSION=`adb shell getprop ro.build.version.sdk`
+MIN_VERSION=23
 
 echo "$TOUCH_DEVICE"
+echo "SDK version: $ANDROID_VERSION"
 
 # Check if input device exists
 if [[ "$TOUCH_DEVICE" = *"Touchscreen device found!"* ]]
