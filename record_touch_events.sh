@@ -8,6 +8,13 @@ MIN_VERSION=23
 
 echo "$TOUCH_DEVICE"
 
+# use specific touch file
+TOUCH_FILE_NAME="recorded_touch_events.txt"
+if [ ! -z "$1" ]
+then
+   TOUCH_FILE_NAME="$1"
+fi
+
 # Check if input device exists
 if [[ "$TOUCH_DEVICE" = *"Touchscreen device found!"* ]]
 then
@@ -18,9 +25,9 @@ then
 
     if (( ANDROID_VERSION > MIN_VERSION )); then
         #exec-out is shell without buffering, fixing missing last touch data event
-        adb exec-out getevent -t "${TOUCH_DEVICE#*-> }" > recorded_touch_events.txt
+        adb exec-out getevent -t "${TOUCH_DEVICE#*-> }" > $TOUCH_FILE_NAME
     else
         # if Android version <= 6.0
-        adb shell getevent -t "${TOUCH_DEVICE#*-> }" > recorded_touch_events.txt
+        adb shell getevent -t "${TOUCH_DEVICE#*-> }" > $TOUCH_FILE_NAME
     fi
 fi
