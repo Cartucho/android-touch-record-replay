@@ -1,12 +1,17 @@
 # Record and Replay Touchscreen Events on Android
 
-[![GitHub stars](https://img.shields.io/github/stars/Cartucho/android-touch-record-replay.svg?style=social&label=Stars)](https://github.com/Cartucho/android-touch-record-replay)
-
-How to record and replay touchscreen events on an Android device.
+How to record and replay touchscreen events on an Android device and emulator.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/15831541/44855448-f4e1a080-ac62-11e8-8b7d-4e48cc80a269.gif"/>
 </p>
+
+
+## Fork
+This fork from [android-touch-record-replay](https://github.com/Cartucho/android-touch-record-replay) adds support for :
+
+- Replaying touches on Android emulators
+- Specify custom filename when recording/replaying
 
 
 ## Table of contents
@@ -24,8 +29,9 @@ You need to:
 
 - Install ADB in your computer (`sudo apt install adb`)
 - Enable `USB Debugging` in your Android device (`Settings > Developer Options > USB Debugging`)
+- Use an Android API <= 28
 
-Now, connect your device to your computer, via a USB cable, and run the following bash script in a terminal:
+Now, connect your device to your computer via a USB cable (or run your emulator), and run the following bash script in a terminal:
 
     ./find_touchscreen_name.sh
 
@@ -35,23 +41,39 @@ Optional:
 
 - It is easier for you to visualize where you touched the screen by turning one of the following (1) `Show touches` or (2) `Pointer location` (In your phone go to `Settings > Developer Options > Input > Show touches`)
 
-
 ## Quick start
-To start using the mAP you need to clone the repo:
+
+To start using the scripts you need to clone the repo:
 
 ```
-git clone https://github.com/Cartucho/android-touch-record-replay
+git clone https://github.com/Nutriz/android-touch-record-replay
 ```
 
 ## Easy method
 
-1. Record touch events with timestamps:
+1. Record touch events:
 
-    `./record_touch_events.sh`
+```bash
+# use default filename for records
+./record_touch_events.sh
+
+# use specific filename
+./record_touch_events.sh my_records.txt
+```
 
 2. Replay those touch event:
 
-    `./replay_touch_events.sh`
+```bash
+# replay on real device with default filename
+./replay_touch_events.sh -realdevice
+
+# replay on emulator with default filename
+./replay_touch_events.sh -emulator
+
+# replay on emulator with specific filename
+./replay_touch_events.sh -emulator my_records.txt
+
+```
 
 ## Step-by-step method and Explanation
 
@@ -182,7 +204,4 @@ This will create a csv file containing the following information:
 ## Authors:
 
 * **João Cartucho**
-
-    Feel free to contribute
-
-    [![GitHub contributors](https://img.shields.io/github/contributors/Cartucho/android-touch-record-replay.svg)](https://github.com/Cartucho/android-touch-record-replay/graphs/contributors)
+* **Jérôme Gully**
