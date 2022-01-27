@@ -86,6 +86,15 @@ In my case, my touchscreen's name is `/dev/input/event7` which I will be using f
 
 6. Finally, we can replay the previous recording by running the command `adb shell /data/local/tmp/mysendevent /dev/input/event7 /sdcard/recorded_touch_events.txt`
 
+This is an example of _touch_ event. Not only the touch event, but also you can do it with the other device input (like home key and back key) in the same way.
+
+i.e,
+```
+$ adb shell /data/local/tmp/mysendevent /dev/input/event7 /sdcard/recorded_touch_events.txt &
+$ adb shell /data/local/tmp/mysendevent /dev/input/event4 /sdcard/recorded_back_key_events.txt &
+```
+Note that & runs those two commands in background.
+
 ## Outputting Touch Data
 
 You may want to export and anyalse the touch screen data.
