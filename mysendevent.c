@@ -58,20 +58,48 @@ void remove_specific_chars(char* str, char c1, char c2) {
     *pw = '\0';
 }
 
+// ENUM to separate between different operation modes
+typedef enum e_Mode {MODE_UNDEFINED, MODE_RELATIVE, MODE_ABSOLUTE} Mode;
+
 int main(int argc, char *argv[])
 {
     int i;
     int fd;
     int ret;
     int version;
+    Mode mode=MODE_ABSOLUTE;
     struct input_event event;
 
-    if(argc != 3) {
-        fprintf(stderr, "use: %s input_device input_events\n", argv[0]);
-        return 1;
-    }
 
-    fd = open(argv[1], O_RDWR);
+	int opt;
+	int verbose=0;
+
+	while ((opt = getopt(argc, argv, "vr")) != -1) {
+		switch (opt) {
+		case 'v':
+		   verbose++;
+		   break;
+		case 'r':
+		   mode = MODE_RELATIVE;
+		   break;
+		default: /* '?' */
+		   fprintf(stderr, "Usage: %s [-r] [-v] input_device input_events\n",
+			   argv[0]);
+		   exit(EXIT_FAILURE);
+		}
+	}
+
+	if (verbose) {
+		printf("verbose=%d; mode=%d; optind=%d\n",
+		   verbose, mode, optind);
+	}	
+
+	if (optind != argc-2) {
+		fprintf(stderr, "Expected two argument after options\n");
+		exit(EXIT_FAILURE);
+	}
+
+    fd = open(argv[optind], O_RDWR);
     if(fd < 0) {
         fprintf(stderr, "could not open %s, %s\n", argv[optind], strerror(errno));
         return 1;
@@ -81,11 +109,17 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    FILE * fd_in = fopen(argv[2], "r");
+    FILE * fd_in;
+    if (strcmp(argv[optind+1], "-")==0) {
+	fd_in = stdin;
+    } else {
+	fd_in = fopen(argv[optind+1], "r");
+    }
     if (fd_in == NULL) {
-        fprintf(stderr, "could not open input file: %s\n", argv[2]);
+        fprintf(stderr, "could not open input file: %s\n", argv[optind+1]);
         return 1;
     }
+
 
     char line[128];
     unsigned int sleep_time;
@@ -96,9 +130,40 @@ int main(int argc, char *argv[])
     char value[32];
 
     while (fgets(line, sizeof(line), fd_in) != NULL) {
-        // remove the characters [ and ] surrounding the timestamp
+
+	// look for special escape character        
+	if (line[0]=='#') {
+		fprintf(stdout, "%s", line);
+		fflush(stdout);
+		continue;
+		fprintf(stdout, "this is not written");
+	}
+
+	// remove the characters [ and ] surrounding the timestamp
         remove_specific_chars(line, '[', ']');
         sscanf(line, "%lf %s %s %s", &timestamp_now, type, code, value);
+
+	// if required sleep before issuing the event
+	if (mode==MODE_ABSOLUTE) {
+		if(timestamp_previous != -1.0)
+		{
+		  // In order to playback the same gestures the code sleeps accordingly to the timestamps from the inputed recording
+		  sleep_time = (unsigned int) ((timestamp_now - timestamp_previous) * MICROSEC);
+
+		  // we don't care about the value of a single event's timestamp but the difference between two sequential events
+		  usleep(sleep_time); // sleep_time is in MICROSECONDS
+		}
+
+		timestamp_previous = timestamp_now;
+	} else if (mode==MODE_RELATIVE && timestamp_now > 0.0) {
+		// In MODE_RELATIVE the timestamp just contains the time to sleep before issuing the next command
+		sleep_time = (unsigned int) (timestamp_now * MICROSEC);
+		usleep(sleep_time);
+		if (verbose>0) {
+                	fprintf(stdout, "!sleeping for %d (%lf)\n%s", sleep_time, timestamp_now, line);
+                	fflush(stdout);
+		}
+	}
 
         // write the event to the appropriate input device
         memset(&event, 0, sizeof(event));
@@ -110,17 +175,6 @@ int main(int argc, char *argv[])
             fprintf(stderr, "write event failed, %s\n", strerror(errno));
             return -1;
         }
-
-        if(timestamp_previous != -1.0)
-        {
-          // In order to playback the same gestures the code sleeps accordingly to the timestamps from the inputed recording
-          sleep_time = (unsigned int) ((timestamp_now - timestamp_previous) * MICROSEC);
-
-          // we don't care about the value of a single event's timestamp but the difference between two sequential events
-          usleep(sleep_time); // sleep_time is in MICROSECONDS
-        }
-
-        timestamp_previous = timestamp_now;
 
         // Clear temporary buffers
         memset(line, 0, sizeof(line));
