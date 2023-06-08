@@ -1,3 +1,4 @@
+# paths are working for my specific Mac OS environment - YMMV
 CC=$(HOME)/Library/Android/sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/darwin-x86_64/bin/armv7a-linux-androideabi21-clang
 CCOPTS=--static -ffunction-sections -fdata-sections -Wl,--gc-sections -march=armv7-a
 ADB="/Applications/Genymotion.app/Contents/MacOS/tools/adb"
